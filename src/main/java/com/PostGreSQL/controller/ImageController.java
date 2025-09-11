@@ -40,7 +40,7 @@ public class ImageController {
         Map<String, String> response = new HashMap<>();
 
         try {
-          //  locationService.importLocationsFromJson("location.json");
+           // locationService.importLocationsFromJson("location.json");
             // Ensure directory exists
             File uploadDir = new File(UPLOAD_DIR);
             if (!uploadDir.exists()) {

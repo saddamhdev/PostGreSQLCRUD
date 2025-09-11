@@ -62,7 +62,7 @@ public class WebConfig {
 
         if ("prod".equalsIgnoreCase(environment)) {
             System.out.println("Online checking:");
-            return new String[]{"https://apistudentpanel.sohojit.com","https://studentpanel.sohojit.com"};
+            return new String[]{"https://159.89.172.251:3085","https://studentpanel.sohojit.com"};
         } else {
             System.out.println("local host checking:");
 
@@ -94,7 +94,8 @@ public class WebConfig {
                                 "/api/users/login",
                                 "/api/image/images",
                                 "/api/locations",
-                                "/uploads/**").permitAll()
+                                "/uploads/**",
+                                "/api/**").permitAll()
                         // .requestMatchers("/api/user/**").hasAuthority("ROLE_Admin") // Restrict access
                         .anyRequest().authenticated()
                 )

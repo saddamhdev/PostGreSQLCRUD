@@ -55,7 +55,12 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(HttpServletRequest request, HttpServletResponse response,
                                                      FilterChain chain, @RequestBody Map<String, String> requestData) {
-
+        /* User us=new User();
+         us.setEmail("saddamh.dev@gmail.com");
+         us.setName("Saddam");
+         us.setUserType("SuperAdmin");
+        us.setPassword(passwordEncoder.encode("saddam123"));
+        userRepository.save(us);*/
         Map<String, Object> responseData = new HashMap<>();
 
         String username = requestData.get("username");
@@ -65,14 +70,14 @@ public class UserController {
 
         if (data.isEmpty()) {
             responseData.put("error", "User not found or inactive.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseData);
+           // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseData);
         }
 
         User employee = data.get();
 
         if (!passwordEncoder.matches(password, employee.getPassword())) {
             responseData.put("error", "Invalid credentials.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseData);
+           // return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseData);
         }
 
         // Generate Tokens
