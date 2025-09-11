@@ -62,7 +62,7 @@ public class WebConfig {
 
         if ("prod".equalsIgnoreCase(environment)) {
             System.out.println("Online checking:");
-            return new String[]{"https://159.89.172.251:3085","https://studentpanel.sohojit.com"};
+            return new String[]{"https://159.89.172.251:3085","https://datacollection.deepseahost.com/","https://studentpanel.sohojit.com"};
         } else {
             System.out.println("local host checking:");
 
