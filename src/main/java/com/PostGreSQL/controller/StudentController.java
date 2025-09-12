@@ -48,24 +48,59 @@ public class StudentController {
     }
     // POST /api/students  -> inserts one document
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-
     public ResponseEntity<String> create(@Valid @RequestBody StudentSubmission body) throws BadRequestException {
-        body.setId(null);
-        // Example business rule: prevent specific dept
+        // Business rule example
         if ("BBA".equalsIgnoreCase(body.getDivision())) {
             throw new BadRequestException2("Department is not allowed");
         }
+
         body.setStatus("ACTIVE");
-        if(! body.getCollege().equals("")){
+        if (body.getCollege() != null && !body.getCollege().isEmpty()) {
             body.setInformationType("HSC");
-        }
-        else{
+        } else {
             body.setInformationType("SSC");
         }
 
-        var saved = repository.save(body); // DuplicateKeyException -> handled globally as 409
-        return ResponseEntity.ok("Successfully Submitted");
+        // 🔎 Check if student exists by sscRoll
+        Optional<StudentSubmission> existing = repository.findBySscRollAndStatus(body.getSscRoll(),"ACTIVE");
+
+        if (existing.isPresent()) {
+            // ✅ Update existing
+            StudentSubmission student = existing.get();
+
+            student.setBanglaName(body.getBanglaName());
+            student.setEnglishName(body.getEnglishName());
+            student.setSscRoll(body.getSscRoll());
+            student.setHighSchool(body.getHighSchool());
+            student.setSscDept(body.getSscDept());
+            student.setSscResult(body.getSscResult());
+            student.setSscMark(body.getSscMark());
+            student.setCollege(body.getCollege());
+            student.setHscDept(body.getHscDept());
+            student.setHscRoll(body.getHscRoll());
+            student.setHscResult(body.getHscResult());
+            student.setHscMark(body.getHscMark());
+            student.setDivision(body.getDivision());
+            student.setDistrict(body.getDistrict());
+            student.setUpazila(body.getUpazila());
+            student.setTarget(body.getTarget());
+            student.setMobile(body.getMobile());
+            student.setGuardianMobile(body.getGuardianMobile());
+            student.setEmail(body.getEmail());
+            student.setComments(body.getComments());
+            student.setStatus("ACTIVE");
+            student.setInformationType(body.getInformationType());
+
+            repository.save(student);
+            return ResponseEntity.ok("✅ Student updated successfully (SSC Roll exists).");
+        } else {
+            // ✅ Insert new
+            body.setId(null); // new insert
+            repository.save(body);
+            return ResponseEntity.ok("✅ Student inserted successfully.");
+        }
     }
+
     @GetMapping("/page")
     public Page<StudentSubmission> getStudents(
             @RequestParam(defaultValue = "0") int page,

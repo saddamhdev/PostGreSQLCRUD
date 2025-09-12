@@ -24,6 +24,7 @@ public interface StudentSubmissionRepository extends JpaRepository<StudentSubmis
     );
 
     Optional<StudentSubmission> findBySscRoll(String sscRoll);
+    Optional<StudentSubmission> findBySscRollAndStatus(String sscRoll,String Status);
     List<StudentSubmission> findByStatus(String status);
 
 }
