@@ -95,7 +95,8 @@ public class WebConfig {
                                 "/api/image/images",
                                 "/api/locations",
                                 "/uploads/**",
-                                "/api/**").permitAll()
+                                "/api/projects/**",
+                                "/api/projects").permitAll()
                         // .requestMatchers("/api/user/**").hasAuthority("ROLE_Admin") // Restrict access
                         .anyRequest().authenticated()
                 )
