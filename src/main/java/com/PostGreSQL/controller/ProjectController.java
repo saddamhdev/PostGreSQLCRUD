@@ -2,8 +2,12 @@ package com.PostGreSQL.controller;
 import com.PostGreSQL.model.Project;
 import com.PostGreSQL.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/projects")
@@ -49,12 +53,14 @@ public class ProjectController {
 
     // DELETE (new)
     @PostMapping("/delete/{id}")
-    public String deleteProject(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteProject(@PathVariable Long id) {
         if (!repo.existsById(id)) {
             throw new RuntimeException("Project not found with id " + id);
         }
         repo.deleteById(id);
-        return "✅ Project deleted successfully!";
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Project deleted successfully!");
+        return ResponseEntity.ok(response);
     }
 
 }

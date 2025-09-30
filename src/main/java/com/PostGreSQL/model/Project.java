@@ -10,18 +10,23 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "TEXT")// title usually short
     private String title;
+
+    @Column(columnDefinition = "TEXT") // if your icon is a URL/base64 string, increase limit
     private String icon;
+
+    @Column(columnDefinition = "TEXT") // description can be long, use TEXT
     private String description;
 
     @ElementCollection
     @CollectionTable(name = "project_technologies", joinColumns = @JoinColumn(name = "project_id"))
-    @Column(name = "technology")
+    @Column(name = "technology", length = 255)
     private List<String> technologies = new ArrayList<>();
 
     @ElementCollection
     @CollectionTable(name = "project_features", joinColumns = @JoinColumn(name = "project_id"))
-    @Column(name = "feature")
+    @Column(name = "feature", columnDefinition = "TEXT") // features can be long text
     private List<String> features = new ArrayList<>();
 
     @ElementCollection
