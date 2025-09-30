@@ -32,10 +32,20 @@ public class JwtFilter extends OncePerRequestFilter {
                                  FilterChain chain) throws ServletException, IOException {
         String path = request.getRequestURI();
 
-       // System.out.println("Incoming Request Headers:");
+        // Skip JWT validation for public endpoints
+        if (path.startsWith("/api/projects") ||
+                path.startsWith("/api/students/submit") ||
+                path.startsWith("/api/users/login") ||
+                path.startsWith("/api/image/images") ||
+                path.startsWith("/api/locations")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // System.out.println("Incoming Request Headers:");
         request.getHeaderNames().asIterator().forEachRemaining(header ->{
 
-            //  System.out.println(header + ": " + request.getHeader(header))
+                    //  System.out.println(header + ": " + request.getHeader(header))
                 }
 
         );
@@ -44,7 +54,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // System.out.println("Auth Header Received: " + authHeader);
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-          //  System.out.println("Missing or Invalid Token");
+            //  System.out.println("Missing or Invalid Token");
             chain.doFilter(request, response);
             return;
         }
@@ -69,9 +79,9 @@ public class JwtFilter extends OncePerRequestFilter {
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-               // System.out.println("User Authenticated: " + username);
+                // System.out.println("User Authenticated: " + username);
             } else {
-               // System.out.println("Invalid Token");
+                // System.out.println("Invalid Token");
             }
         }
 
