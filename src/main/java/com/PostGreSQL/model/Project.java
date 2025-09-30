@@ -16,6 +16,12 @@ public class Project {
     @Column(columnDefinition = "TEXT") // if your icon is a URL/base64 string, increase limit
     private String icon;
 
+    @Column(length = 255)
+    private String role;
+
+
+
+
     @Column(columnDefinition = "TEXT") // description can be long, use TEXT
     private String description;
 
@@ -37,7 +43,13 @@ public class Project {
 
     public Project() {
     }
+    public String getRole() {
+        return role;
+    }
 
+    public void setRole(String role) {
+        this.role = role;
+    }
     public Long getId() {
         return id;
     }

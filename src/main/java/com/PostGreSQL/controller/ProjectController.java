@@ -43,6 +43,7 @@ public class ProjectController {
         return repo.findById(id).map(project -> {
             project.setTitle(updatedProject.getTitle());
             project.setIcon(updatedProject.getIcon());
+            project.setRole(updatedProject.getRole());
             project.setDescription(updatedProject.getDescription());
             project.setTechnologies(updatedProject.getTechnologies());
             project.setFeatures(updatedProject.getFeatures());
