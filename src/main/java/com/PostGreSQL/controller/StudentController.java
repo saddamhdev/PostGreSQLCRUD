@@ -22,9 +22,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/students/submit")
@@ -48,8 +46,8 @@ public class StudentController {
     }
     // POST /api/students  -> inserts one document
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> create(@Valid @RequestBody StudentSubmission body) throws BadRequestException {
-        // Business rule example
+    public ResponseEntity<Map<String, Object>> create(@Valid @RequestBody StudentSubmission body) throws BadRequestException {
+        // Business rule
         if ("BBA".equalsIgnoreCase(body.getDivision())) {
             throw new BadRequestException2("Department is not allowed");
         }
@@ -61,11 +59,12 @@ public class StudentController {
             body.setInformationType("SSC");
         }
 
-        // 🔎 Check if student exists by sscRoll
+        Map<String, Object> response = new HashMap<>();
+
+        // Check if student exists by sscRoll
         Optional<StudentSubmission> existing = repository.findBySscRollAndStatus(body.getSscRoll(),"ACTIVE");
 
         if (existing.isPresent()) {
-            // ✅ Update existing
             StudentSubmission student = existing.get();
 
             student.setBanglaName(body.getBanglaName());
@@ -92,14 +91,26 @@ public class StudentController {
             student.setInformationType(body.getInformationType());
 
             repository.save(student);
-            return ResponseEntity.ok("✅ Student updated successfully (SSC Roll exists).");
+
+            response.put("status", "success");
+            response.put("action", "update");
+            response.put("message", "✅ Student updated successfully (SSC Roll exists).");
+            response.put("data", student);
+            return ResponseEntity.ok(response);
+
         } else {
-            // ✅ Insert new
-            body.setId(null); // new insert
-            repository.save(body);
-            return ResponseEntity.ok("✅ Student inserted successfully.");
+            // Insert new
+            body.setId(null);
+            StudentSubmission saved = repository.save(body);
+
+            response.put("status", "success");
+            response.put("action", "insert");
+            response.put("message", "✅ Student inserted successfully.");
+            response.put("data", saved);
+            return ResponseEntity.ok(response);
         }
     }
+
 
     @GetMapping("/page")
     public Page<StudentSubmission> getStudents(
