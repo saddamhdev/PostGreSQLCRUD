@@ -18,17 +18,18 @@ public class ProjectController {
 
     @PostMapping
     public Project addProject(@RequestBody Project project) {
+        project.setPosition(repo.findAll().size()+1);
         return repo.save(project);
     }
 
     @GetMapping
     public List<Project> getAllProjects() {
-        return repo.findAll();
+        return repo.findAllByOrderByPositionAsc();
     }
 
     @GetMapping("/{title}")
-    public Project getByTitle(@PathVariable String title) {
-        return repo.findByTitle(title).orElseThrow(() -> new RuntimeException("Project not found"));
+    public Project getByTitle(@PathVariable long title) {
+        return repo.findById(title).orElseThrow(() -> new RuntimeException("Project not found"));
     }
     // READ by ID (new)
     @GetMapping("/get/{id}")

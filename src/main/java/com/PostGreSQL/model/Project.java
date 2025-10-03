@@ -19,7 +19,8 @@ public class Project {
     @Column(length = 255)
     private String role;
 
-
+    @Column(columnDefinition = "TEXT")
+    private int position;
 
 
     @Column(columnDefinition = "TEXT") // description can be long, use TEXT
@@ -38,6 +39,8 @@ public class Project {
     @ElementCollection
     @CollectionTable(name = "project_demo_links", joinColumns = @JoinColumn(name = "project_id"))
     private List<DemoLink> demoLinks = new ArrayList<>();
+
+
 
     // Getters and setters
 
@@ -104,5 +107,13 @@ public class Project {
 
     public void setDemoLinks(List<DemoLink> demoLinks) {
         this.demoLinks = demoLinks;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }
